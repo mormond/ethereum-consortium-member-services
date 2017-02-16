@@ -81,7 +81,7 @@
   "variables": {
     "WebApiName": "[concat('WebApi', uniqueString(resourceGroup().id))]",
     "sqlserverName": "[concat('sqlserver', uniqueString(resourceGroup().id))]",
-      "WebAppName": "[concat('WebApp', uniqueString(resourceGroup().id))]"
+    "WebAppName": "[concat('WebApp', uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
@@ -152,7 +152,8 @@
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
+        "[resourceId('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]",
+        "[resourceId('Microsoft.Sql/servers', variables('sqlserverName'))]"
       ],
       "tags": {
         "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty",
@@ -397,22 +398,28 @@
         "ApplicationId": "[variables('WebApiName')]"
       }
     },
-      {
-          "name": "[variables('WebAppName')]",
-          "type": "Microsoft.Web/sites",
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2015-08-01",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
-          ],
-          "tags": {
-              "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName')))]": "Resource",
-              "displayName": "WebApp"
-          },
-          "properties": {
-              "name": "[variables('WebAppName')]",
-              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
-          }
+    {
+      "name": "[variables('WebAppName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-08-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName')))]": "Resource",
+        "displayName": "WebApp"
+      },
+      "properties": {
+        "name": "[variables('WebAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
       }
-  ]
+    }
+  ],
+  "outputs": {
+    "WebApiName": {
+      "type": "string",
+      "value": "[variables('WebApiName')]"
+    }
+  }
 }
