@@ -1,3 +1,13 @@
+# Parameter help description
+param(
+[parameter(Mandatory = $true)]
+[String]
+$rgName,
+[parameter(Mandatory = $true)]
+[String]
+$appName
+)
+
 function ReadHostWithDefault($message, $default)
 {
     $result = Read-Host "$message [$default]"
@@ -231,5 +241,5 @@ $Context = Get-AzureRmContext
 $Subscription = $Context.Subscription
 $subscriptionId = $Subscription.SubscriptionId
 
-AddExistingVnet $subscriptionId $resourceGroup $appName
+AddExistingVnet $subscriptionId $rgName $appName
 
