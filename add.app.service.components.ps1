@@ -24,12 +24,14 @@ Param(
     [string]$skuName
 )
 
+$invocationPath = Split-Path $MyInvocation.MyCommand.Path
+
 #
 # Add the App Service components (web site + SQL Server)
 #
 #
 
-$webOutputs = New-AzureRmResourceGroupDeployment -TemplateFile ".\template.web.components.json" `
+$webOutputs = New-AzureRmResourceGroupDeployment -TemplateFile ($invocationPath + "\template.web.components.json") `
   -ResourceGroupName $rgName `
   -hostingPlanName $hostingPlanName `
   -skuName $skuName `
