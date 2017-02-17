@@ -1,11 +1,9 @@
-# Parameter help description
-param(
-[parameter(Mandatory = $true)]
-[String]
-$rgName,
-[parameter(Mandatory = $true)]
-[String]
-$appName
+# Parameters
+# rgName - The resource group into which to deploy
+# appName - The name of the App Service for VNet integration
+Param(
+[string]$rgName,
+[string]$appName
 )
 
 function ReadHostWithDefault($message, $default)
