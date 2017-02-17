@@ -5,7 +5,9 @@ Param(
     [Parameter(Mandatory=$True)]
     [string]$rgName,
     [Parameter(Mandatory=$True)]
-    [string]$appName
+    [string]$targetVnetName,
+    [Parameter(Mandatory=$True)]
+    [string]$appName    
 )
 
 function ReadHostWithDefault($message, $default) {
@@ -88,7 +90,7 @@ function AddExistingVnet($subscriptionId, $resourceGroupName, $webAppName) {
 
     Write-Host
     #$vnet = PromptCustom "Select a VNET to integrate with" $vnets $vnetNames
-    $vnet = Get-AzureRmVirtualNetwork -Name "dx-founder-vnet" -ResourceGroupName $resourceGroupName
+    $vnet = Get-AzureRmVirtualNetwork -Name $targetVnetName -ResourceGroupName $resourceGroupName
 
     # We need to check if this VNET is able to be joined to a App, based on following criteria
     # If there is no gateway, we can create one.
