@@ -67,7 +67,7 @@ function CreateVnetGateway($resourceGroupName, $vnetName, $vnetIpName, $location
     New-AzureRmVirtualNetworkGateway -Name $vnetGatewayName -ResourceGroupName $resourceGroupName -Location $location -IpConfigurations $ipconf -GatewayType Vpn -VpnType RouteBased -EnableBgp $false -GatewaySku Basic -VpnClientAddressPool $vnetPointToSiteAddressSpace -VpnClientRootCertificates $root
 }
 
-function AddExistingVnet($subscriptionId, $resourceGroupName, $webAppName) {
+function AddExistingVnet($subscriptionId, $resourceGroupName, $vnetName, $webAppName) {
     $ErrorActionPreference = "Stop";
 
     # At this point, the gateway should be able to be joined to an App, but may require some minor tweaking. We will declare to the App now to use this VNET
@@ -90,7 +90,7 @@ function AddExistingVnet($subscriptionId, $resourceGroupName, $webAppName) {
 
     Write-Host
     #$vnet = PromptCustom "Select a VNET to integrate with" $vnets $vnetNames
-    $vnet = Get-AzureRmVirtualNetwork -Name $targetVnetName -ResourceGroupName $resourceGroupName
+    $vnet = Get-AzureRmVirtualNetwork -Name $vnetName -ResourceGroupName $resourceGroupName
 
     # We need to check if this VNET is able to be joined to a App, based on following criteria
     # If there is no gateway, we can create one.
@@ -214,11 +214,9 @@ function RemoveVnet($subscriptionId, $resourceGroupName, $webAppName) {
     }
 }
 
-$resourceGroup = "BC_Founder"
-$appName = "bcgateway"
 $Context = Get-AzureRmContext
 $Subscription = $Context.Subscription
 $subscriptionId = $Subscription.SubscriptionId
 
-AddExistingVnet $subscriptionId $rgName $appName
+AddExistingVnet $subscriptionId $rgName $targetVnetName $appName
 
